@@ -236,3 +236,68 @@ L'extension .php va provoquer le déclenchement du moteur php et exécuter le co
 
 </details>
 
+# 13
+
+<p>
+<details>
+<summary> Caché</summary>
+ 
+>natas13:jmLTY0qiPZBbaKc9341cqPQZBJv7MQbY
+
+*Forger la requête*
+
+*Injection de code OS*
+
+Même exercice que le précédent mais cette fois un vérification complémentaire est effectuée pour vérifier que le fichier est vraiment une image (fonction exif_imagetype).
+
+La vérification porte sur la lecture des premiers octets. Une façon simple de résoudre le problème est donc d'ajouter le code php précédent au corps d'une image. Le fichier en annexe a été construit ainsi et provoque le même résultat que précédemment.
+
+</details>
+
+# 14
+
+<p>
+<details>
+<summary> Caché</summary>
+ 
+>natas14:Lg96M10TdfaPyVBkJdjymbllQ5L6qdl1
+
+*Injection de code SQL*
+
+Requete lancée :
+```php
+$query = "SELECT * from users where username=\"".$_REQUEST["username"]."\" and password=\"".$_REQUEST["password"]."\"";
+```
+Si on renseigne username : `natas15"  #` la requete devient :
+```sql
+SELECT * from users where username="natas15" # " and password=""
+```
+
+</details>
+
+# 15
+
+<p>
+<details>
+<summary> Caché</summary>
+ 
+>natas15:AwWj0w5cvxrZiONgZ9J5stNVkmxdk39J
+
+*Injection de code SQL*
+
+*Brute force*
+
+Requete lancée :
+```php
+ $query = "SELECT * from users where username=\"".$_REQUEST["username"]."\""; 
+```
+Si on renseigne username : `natas16" AND password LIKE BINARY "a%"  #` la requete devient :
+```sql
+SELECT * from users where username="natas16" AND password LIKE BINARY "a%"  #"
+```
+et on peut ainsi vérifier si le mot de passe de natas16 commence par a. (instruction BINARY pour réaliser des coparaison case sensitive)
+
+En itérant sur tous les caractères on finit par obtenir le mot de passe complet (Exemple de code pour résoudre en annexe).
+
+</details>
+
