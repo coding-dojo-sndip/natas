@@ -301,3 +301,93 @@ En itérant sur tous les caractères on finit par obtenir le mot de passe comple
 
 </details>
 
+
+# 16
+
+<p>
+<details>
+<summary> Caché</summary>
+
+>natas16:WaIHEacj63wnNIBROHeqi3p9t0m5nhmh
+
+*Injection de code OS*
+
+*Brute force*
+
+Comme dans 9 et 10 sauf que la commande lancée est maintenant : 
+```
+grep -i "$key" dictionary.txt
+```
+(avec des guillemets autour de l'entrée utilisateur) et les caractères interdits sont ;|&`'"
+
+On peut cependant injecter du code via l'écriture `$()` qui execute du code au sein d'une chaîne de caratères encapsulée dans "".
+
+L'idée va être d'injecter des instructions de la forme `$(grep ^a /etc/natas_webpass/natas17)` pour voir si le mot de passe commence par a. Pour le valider on choisit un mot du dictionnaire assez long pour que rajouter n'importe quel caractère aboutisse à une réponse vide. Par exemple `Easters`.
+
+La requete `needle=easters$(grep ^a /etc/natas_webpass/natas17)` provoquera la requete effective :
+- si le mot de passe de natas 17 commence par un a : 
+```
+grep -i eastersMotDePasseNatas17 dictionary.txt
+```
+et ne renverra donc aucun résult
+- si le mot de passe ne commence pas par un a :
+```
+grep -i easters dictionary.txt
+```
+et renverra donc Easters comme résultat.
+
+La présence de `Easters` dans la réponse nous indique donc l'échec de notre proposition de début de mot de passe.
+
+En itérant sur tous les caractères on finit par obtenir le mot de passe complet (Exemple de code pour résoudre en annexe).
+
+</details>
+
+# 17
+
+<p>
+<details>
+<summary> Caché</summary>
+
+>natas17:8Ps3H0GWbn5rd9S7GmAdgQNdkhPkq9cw
+
+*Injection de code SQL*
+
+*Brute force*
+
+Même exercice que le 15 mais cette fois toutes les sorties sont mises en commentaire côté php et il devient impossible de distinguer dans le corps une différence entre user exists ou non.
+
+Une différence peut être créée au niveau des temps de réponse grace à l'instruction SLEEP(n) qui provoque une pause de n secondes dans le processus côté base de données.
+
+En rajoutant l'instruction `AND SLEEP(2)` : si la ligne matche, une requete valide répondra en 2 secondes au lieu de quelques millisecondes.
+
+On va donc renseigner username : `natas18" AND password LIKE BINARY "a%" AND SLEEP(2) #` et la requete devient :
+```sql
+SELECT * from users where username="natas18" AND password LIKE BINARY "a%" AND SLEEP(2) #"
+```
+
+En itérant sur tous les caractères on finit par obtenir le mot de passe complet (Exemple de code pour résoudre en annexe).
+
+</details>
+
+# 18
+
+<p>
+<details>
+<summary> Caché</summary>
+
+>natas18:xvKIqDjy4OPv7wCRgDlmj0pFsCsDjhdP
+
+*Forger la requête*
+
+*Vol de session*
+
+D'après le code les identifiants de session ne vont que de 0 à 640. Il suffit alors de tester tous les identifiants de sessions possibles en espérant tomber sur un compte admin.
+
+Le code en annexe propose jusqu'à trouver un identifiant que affiche le mot de passe l'entête :
+```
+Cookie: PHPSESSID=identifiantSession
+```
+dans la requête.
+
+</details>
+
