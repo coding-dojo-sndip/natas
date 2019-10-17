@@ -11,7 +11,7 @@ import java.net.Proxy;
 import java.net.URL;
 import java.util.Base64;
 
-public class Natas {
+public class Natas15 {
 
 	static String caracteres = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789";
 
