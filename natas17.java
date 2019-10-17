@@ -35,7 +35,7 @@ public class Natas16 {
 	static boolean envoyerRequete(String param) throws IOException {
 
 		HttpURLConnection connection = null;
-		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy-rie.http.insee.fr", 8080));
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("", 0));
 		URL url = new URL("http://natas17.natas.labs.overthewire.org/index.php?debug");
 		connection = (HttpURLConnection) url.openConnection(proxy);
 		connection.setRequestMethod("POST");
